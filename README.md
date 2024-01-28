@@ -26,16 +26,17 @@ Welcome to the Web App DevOps Project repo! This application allows you to effic
 
 - **Order List:** View a comprehensive list of orders including details like date UUID, user ID, card number, store code, product code, product quantity, order date, and shipping date.
 
-![Screenshot of Order List in table format](https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/3a3bae88-9224-4755-bf62-567beb7bf692)
+  ![Screenshot of Order List in table format](images/order-list.png)
 
 - **Pagination:** Easily navigate through multiple pages of orders using the built-in pagination feature.
 
-![Screenshot of Pagination Navigation](https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/d92a045d-b568-4695-b2b9-986874b4ed5a)
+  ![Screenshot of Pagination Navigation](images/pagination.png)
 
 - **Add New Order:** Fill out a user-friendly form to add new orders to the system with necessary information.
-<p>
-  <img height="500" alt="Screenshot of Add New Order form" src="https://github.com/maya-a-iuga/Web-App-DevOps-Project/assets/104773240/83236d79-6212-4fc3-afa3-3cee88354b1a">
-</p>
+
+   <p>
+   <img height="350" alt="Screenshot of Add New Order form" src="https://github.com/SophiaKaterinis/Web-App-DevOps-Project/tree/main/images/add-new-order.png">
+   </p>
 
 - **Data Validation:** Ensure data accuracy and completeness with required fields, date restrictions, and card number validation.
 
@@ -43,29 +44,31 @@ Welcome to the Web App DevOps Project repo! This application allows you to effic
 
 - **Adding a Delivery Date Column to Order List:**
 
-  > [!NOTE]
-  > This feature was requested and then reverted. See [issue #1](https://github.com/SophiaKaterinis/Web-App-DevOps-Project/issues/1).
+   <table style="border-style:solid;border-width:thin;border-left-width:thick;">
+   <tr><th>📝 NOTE</th></tr>
+   <tr><td>This feature was requested and then reverted. See <a href="https://github.com/SophiaKaterinis/Web-App-DevOps-Project/issues/1">issue #1</a></td></tr> 
+   </table>
 
-  - <details>
-    <summary>If requested again, follow these instructions:</summary>
+- <details>
+  <summary>If requested again, follow these instructions:</summary>
 
-    1.  In `app.py` modify the following:
+  1.  In `app.py` modify the following:
 
-        a. `Order` class to include `delivery_date = Column('Delivery Date', DateTime)`
+      a. `Order` class to include `delivery_date = Column('Delivery Date', DateTime)`
 
-        b. `@app.route` `add_order` function to include `delivery_date = request.form['delivery_date']`
+      b. `@app.route` `add_order` function to include `delivery_date = request.form['delivery_date']`
 
-        c. `new_order` object to include `delivery_date=delivery_date`
+      c. `new_order` object to include `delivery_date=delivery_date`
 
-    2.  In `order.html` modify the following:
+  2.  In `order.html` modify the following:
 
-        a. `<th>` elements to include `<th>Delivery Date</th>`
+      a. `<th>` elements to include `<th>Delivery Date</th>`
 
-        b. `<td>` elements to include `<td>{{ order.delivery_date }}</td>`
+      b. `<td>` elements to include `<td>{{ order.delivery_date }}</td>`
 
-        c. `<form>` element to include `<label for="delivery_date">Delivery Date:</label>` and `<input type="date" id="delivery_date" name="delivery_date"><br><br>`
+      c. `<form>` element to include `<label for="delivery_date">Delivery Date:</label>` and `<input type="date" id="delivery_date" name="delivery_date"><br><br>`
 
-    </details>
+  </details>
 
 <p>
   <a href="#readme-top">back to top</a>
@@ -304,72 +307,87 @@ To run the application, you simply need to run the `app.py` script in this repos
 
 ### Creating an AKS Cluster with IaC using Terraform
 
-1. <details>
-   <summary>Define the Project Main Configuration</summary>
+1.  <details>
+    <summary>Define the Project Main Configuration</summary>
 
-   Inside the main project directory `aks-terraform` create a `main.tf` file.
+    Inside the main project directory `aks-terraform` create a `main.tf` file.
 
-   Define the Azure `provider` block to enable authentication to Azure using your service principal credentials.
+    Define the Azure `provider` block to enable authentication to Azure using your service principal credentials.
 
-   - To get your service principal credentials:
-     - Open your terminal and sign in to [Azure](https://portal.azure.com/#home) using the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) command: `az login`.
-     - Follow the prompts to authenticate with your Azure account.
-     - Once you are logged in, list your Azure subscriptions and their details using the following command: `az account list --output table`. This command will display a table with information about your Azure subscriptions. Look for the `SubscriptionId` column to find your subscription ID.
-   - To create a Service Principal use the command:
-     ```
-     az ad sp create-for-rbac --name <your-app-name> --role contributor --scopes /subscriptions/<your-subscription-id>/resourceGroups/<your-resource-group-name>
-     ```
+    - To get your service principal credentials:
+      - Open your terminal and sign in to [Azure](https://portal.azure.com/#home) using the [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) command: `az login`.
+      - Follow the prompts to authenticate with your Azure account.
+      - Once you are logged in, list your Azure subscriptions and their details using the following command: `az account list --output table`. This command will display a table with information about your Azure subscriptions. Look for the `SubscriptionId` column to find your subscription ID.
+    - To create a Service Principal use the command:
+      ```
+      az ad sp create-for-rbac --name <your-app-name> --role contributor --scopes /subscriptions/<your-subscription-id>/resourceGroups/<your-resource-group-name>
+      ```
 
-   </details>
+    </details>
 
-2. <details>
-   <summary>Integrate the Networking Module</summary>
+2.  <details>
+    <summary>Integrate the Networking Module</summary>
 
-   - Set `resource_group_name` to a descriptive name, such as `networking-resource-group`
-   - Set `location` to an Azure region that is geographically close to you to improve latency (e.g. `"UK South"`)
-   - Set `vnet_address_space` to `["10.0.0.0/16"]`
-
-   </details>
-
-3. <details>
-   <summary>Integrate the Cluster Module</summary>
-      
-    - Set `cluster_name` to `terraform-aks-cluster`
+    - Set `resource_group_name` to a descriptive name, such as `networking-resource-group`
     - Set `location` to an Azure region that is geographically close to you to improve latency (e.g. `"UK South"`)
-    - Set `dns_prefix` to `myaks-project`
-    - Set `service_principal_client_id`and `service_principal_secret` to your service principal credentials
-    - Use variables referencing the output variables from the networking module for the other input variables required by the cluster module such as: `resource_group_name`, `vnet_id`, `control_plane_subnet_id`, `worker_node_subnet_id` and `aks_nsg_id`
-    
+    - Set `vnet_address_space` to `["10.0.0.0/16"]`
+
     </details>
 
-4. <details>
-   <summary>Apply the Main Project Configuration</summary>
-      
-   - **Initialise the main project:** `cd` into `aks-terraform` and run the initialisiation command `terraform init`
-   - **Review configuration & plan deployment:** `terraform plan`
-      > [!IMPORTANT]  
-      > If you have sensitive or secret input variables stored in a *.tfvars file, use the command `terraform plan -var-file="<your-secret-file-name>.tfvars"`
+3.  <details>
+    <summary>Integrate the Cluster Module</summary>
+       
+     - Set `cluster_name` to `terraform-aks-cluster`
+     - Set `location` to an Azure region that is geographically close to you to improve latency (e.g. `"UK South"`)
+     - Set `dns_prefix` to `myaks-project`
+     - Set `service_principal_client_id`and `service_principal_secret` to your service principal credentials
+     - Use variables referencing the output variables from the networking module for the other input variables required by the cluster module such as: `resource_group_name`, `vnet_id`, `control_plane_subnet_id`, `worker_node_subnet_id` and `aks_nsg_id`
+     
+     </details>
+
+4.  <details>
+    <summary>Apply the Main Project Configuration</summary>
+       
+    - **Initialise the main project:** `cd` into `aks-terraform` and run the initialisiation command `terraform init`
+    - **Review configuration & plan deployment:** `terraform plan`
+       <table style="border-style:solid;border-width:thin;border-left-width:thick;">
+       <tr><th>❗ IMPORTANT</th></tr>
+       <tr><td>If you have sensitive or secret input variables stored in a <code>*.tfvars</code> file, use the command:</td></tr> 
+       </table>
+       
+       ```
+       terraform plan -var-file="<your-secret-file-name>.tfvars"
+       ```
+
     - **Apply the Terraform configuration:** `terraform apply`
-      > [!IMPORTANT]  
-      > If you have sensitive or secret input variables stored in a *.tfvars file, use the command `terraform apply -var-file="<your-secret-file-name>.tfvars"`
-    
-    </details>
+      <table style="border-style:solid;border-width:thin;border-left-width:thick;">
+      <tr><th>❗ IMPORTANT</th></tr>
+      <tr><td>If you have sensitive or secret input variables stored in a <code>*.tfvars</code> file, use the command:</td></tr> 
+      </table>
 
-5. <details>
-   <summary>Access the AKS Cluster</summary>
-
-   - Retreive the `kubeconfig` file once the AKS cluster has been provisioned.
-
-     - Use the command:
-
-     ```
-     az aks get-credentials --resource-group <your-resource-group> --name <your-aks-cluster-name>
-     ```
-
-     > [!IMPORTANT]
-     > If you use `wsl` on Windows and you’ve set up the kubectl tool as part of your Docker installation, Docker needs to be running for `kubectl` commands to work.
+      ```
+      terraform apply -var-file="<your-secret-file-name>.tfvars"
+      ```
 
      </details>
+
+5.  <details>
+    <summary>Access the AKS Cluster</summary>
+
+    - Retreive the `kubeconfig` file once the AKS cluster has been provisioned.
+
+      - Use the command:
+
+      ```
+      az aks get-credentials --resource-group <your-resource-group> --name <your-aks-cluster-name>
+      ```
+
+      <table style="border-style:solid;border-width:thin;border-left-width:thick;">
+      <tr><th>❗ IMPORTANT</th></tr>
+      <tr><td>If you use <code>wsl</code> on Windows and you’ve set up the kubectl tool as part of your Docker installation, Docker needs to be running for <code>kubectl</code> commands to work.</td></tr> 
+      </table>
+
+      </details>
 
 ### Kubernetes Deployment to AKS
 
@@ -529,12 +547,19 @@ To run the application, you simply need to run the `app.py` script in this repos
    Create, configure and save the following charts in Metrics Explorer:
 
    - **Average Node CPU Usage**: This chart allows you to track the CPU usage of your AKS cluster's nodes. Monitoring CPU usage helps ensure efficient resource allocation and detect potential performance issues.
+
      ![Average Node CPU Usage](images/avg-node-cpu-usage.png)
+
    - **Average Pod Count**: This chart displays the average number of pods running in your AKS cluster. It's a key metric for evaluating the cluster's capacity and workload distribution.
+
      ![Average Pod Count](images/avg-pod-count.png)
+
    - **Used Disk Percentage**: Monitoring disk usage is critical to prevent storage-related issues. This chart helps you track how much disk space is being utilized.
+
      ![Used Disk Percentage](images/avg-used-disk-space.png)
+
    - **Bytes Read and Written per Second**: Monitoring data I/O is crucial for identifying potential performance bottlenecks. This chart provides insights into data transfer rates.
+
      ![Bytes Read and Written per Second](images/avg-byte-read-write-per-sec.png)
 
    Access the dashboard where the charts are saved and verify that the data is being visualized correctly.
@@ -547,14 +572,23 @@ To run the application, you simply need to run the `app.py` script in this repos
    Configure Log Analytics to execute and save the following logs:
 
    - **Average Node CPU Usage Percentage per Minute**: This configuration captures data on node-level usage at a granular level, with logs recorded per minute
+
      ![Average Node CPU Usage Percentage per Minute](images/avg-used-disk-space-percent.png)
+
    - **Average Node Memory Usage Percentage per Minute**: Similar to CPU usage, tracking memory usage at node level allows you to detect memory-related performance concerns and efficiently allocate resources
+
      ![Average Node Memory Usage Percentage per Minute](images/avg-node-mem-percent-per-min.png)
+
    - **Pods Counts with Phase**: This log configuration provides information on the count of pods with different phases, such as Pending, Running, or Terminating. It offers insights into pod lifecycle management and helps ensure the cluster's workload is appropriately distributed.
+
      ![Pods Counts with Phase](images/pod-count-with-phase.png)
+
    - **Find Warning Value in Container Logs**: By configuring Log Analytics to search for `warning` values in container logs, you proactively detect issues or errors within your containers, allowing for prompt troubleshooting and issues resolution
+
      ![Find Warning Value in Container Logs](images/find-warning-val-in-container-logs.png)
+
    - **Monitoring Kubernetes Events**: Monitoring Kubernetes events, such as pod scheduling, scaling activities, and errors, is essential for tracking the overall health and stability of the cluster
+
      ![Monitoring Kubernetes Events](images/monitor-kub-events.png)
 
    </details>
@@ -572,6 +606,7 @@ To run the application, you simply need to run the `app.py` script in this repos
    <summary>Modify CPU and Memory Alert Rules</summary>
 
    Adjust the alert rules for CPU usage and memory working set percentage to trigger when they exceed 80%. CPU and memory are critical resources in your AKS cluster. When they are heavily utilized, it can lead to decreased application performance. By setting alert rules to trigger at 80%, you ensure that you are notified when these resources are approaching critical levels.
+
    ![Alert Rules](images/alert-rules.png)
 
    </details>
