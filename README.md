@@ -35,7 +35,7 @@ Welcome to the Web App DevOps Project repo! This application allows you to effic
 - **Add New Order:** Fill out a user-friendly form to add new orders to the system with necessary information.
 
    <p>
-   <img height="350" alt="Screenshot of Add New Order form" src="https://github.com/SophiaKaterinis/Web-App-DevOps-Project/tree/main/images/add-new-order.png">
+   <img height="350" alt="Screenshot of Add New Order form" src="images/add-new-order.png">
    </p>
 
 - **Data Validation:** Ensure data accuracy and completeness with required fields, date restrictions, and card number validation.
